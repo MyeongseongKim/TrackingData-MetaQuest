@@ -7209,6 +7209,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1506405677}
   - component: {fileID: 1506405676}
+  - component: {fileID: 1506405678}
   m_Layer: 0
   m_Name: Tracking Manager
   m_TagString: Untagged
@@ -7231,6 +7232,21 @@ MonoBehaviour:
   _cameraRig: {fileID: 79654723}
   _leftHand: {fileID: 1155861240}
   _rightHand: {fileID: 604500801}
+  JsonCompleteEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1506405678}
+        m_TargetAssemblyTypeName: TrackingDataVisualizer, Assembly-CSharp
+        m_MethodName: UpdateMarkers
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!4 &1506405677
 Transform:
   m_ObjectHideFlags: 0
@@ -7246,6 +7262,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1506405678
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1506405675}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0deac4ca88e932345b494b554209e6b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _jointPrefab: {fileID: 8452871400022939658, guid: 9a686f8cc5588c14a84f08668ae76348, type: 3}
+  _frustumPrefab: {fileID: 8452871400022939658, guid: e8b97e8454177e540acef8b82d4f2ce4, type: 3}
 --- !u!1 &1509615385
 GameObject:
   m_ObjectHideFlags: 0

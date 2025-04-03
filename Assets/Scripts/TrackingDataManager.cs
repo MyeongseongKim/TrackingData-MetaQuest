@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Events;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -22,6 +23,8 @@ public class TrackingDataManager : MonoBehaviour
     [SerializeField]
     private Hand _rightHand;
 
+    public UnityEvent<string> JsonCompleteEvent;
+
 
     void Start()
     {
@@ -32,8 +35,8 @@ public class TrackingDataManager : MonoBehaviour
     void Update()
     {
         var frame = CaptureFrame();
-        // string json = JsonUtility.ToJson(frame);
         string json = JsonConvert.SerializeObject(frame, Formatting.Indented);
+        JsonCompleteEvent?.Invoke(json);
         Debug.Log(json);
     }
 
