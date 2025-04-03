@@ -8,70 +8,10 @@ using Oculus.Interaction.Input;
 
 using Newtonsoft.Json;
 
-
-#region Data Classes
-
-[Serializable]
-public struct SerializableVector3
-{
-    public float x, y, z;
-    public SerializableVector3(Vector3 v)
-    {
-        x = v.x;
-        y = v.y;
-        z = v.z;
-    }
-}
-
-[Serializable]
-public struct SerializableQuaternion
-{
-    public float x, y, z, w;
-    public SerializableQuaternion(Quaternion q)
-    {
-        x = q.x;
-        y = q.y;
-        z = q.z;
-        w = q.w;
-    }
-}
-
-[Serializable]
-public class PoseData
-{
-    public SerializableVector3 position;
-    public SerializableQuaternion rotation;
-
-    public PoseData(Vector3 pos, Quaternion rot)
-    {
-        position = new SerializableVector3(pos);
-        rotation = new SerializableQuaternion(rot);
-    }
-    public PoseData(Pose pose)
-    {
-        position = new SerializableVector3(pose.position);
-        rotation = new SerializableQuaternion(pose.rotation);
-    }
-}
-
-[Serializable]
-public class HandData 
-{
-    public Dictionary<string, List<PoseData>> groups = new();
-}
-
-[Serializable]
-public class TrackingFrame 
-{
-    public float timestamp;
-    public Dictionary<string, PoseData> head = new();
-    public Dictionary<string, HandData> hands = new();
-}
-
-#endregion
+using SerializableData;
 
 
-public class TrackingManager : MonoBehaviour
+public class TrackingDataManager : MonoBehaviour
 {
     public static readonly Dictionary<string, HandJointId[]> HAND_JOINTS = new Dictionary<string, HandJointId[]> {
         { "Wrist", new[] {HandJointId.HandWristRoot} },  
@@ -109,9 +49,9 @@ public class TrackingManager : MonoBehaviour
     }
 
 
-    private TrackingFrame CaptureFrame()
+    private SerializableTrackingData CaptureFrame()
     {
-        var frame = new TrackingFrame();
+        var frame = new SerializableTrackingData();
 
         // timestamp
         frame.timestamp = Time.time;
@@ -119,11 +59,11 @@ public class TrackingManager : MonoBehaviour
         // head
         if (_cameraRig != null && _cameraRig.centerEyeAnchor != null)
         {
-            var centerEyePoseData = new PoseData(
+            var centerEyeData = new SerializablePose(
                 _cameraRig.centerEyeAnchor.position, 
                 _cameraRig.centerEyeAnchor.rotation
             );
-            frame.head.Add("CenterEye", centerEyePoseData);
+            frame.head.Add("CenterEye", centerEyeData);
         }
         else 
         {
@@ -156,22 +96,22 @@ public class TrackingManager : MonoBehaviour
     }
 
 
-    private HandData ExtractHandData(Hand hand) 
+    private SerializableHandData ExtractHandData(Hand hand) 
     {
-        var handData = new HandData();
+        var handData = new SerializableHandData();
         
         foreach (var pair in HAND_JOINTS) 
         {
             var name = pair.Key;
             var joints = pair.Value;
 
-            List<PoseData> group = new List<PoseData>();
+            List<SerializablePose> group = new List<SerializablePose>();
             for (int i = 0; i < joints.Length; i++) 
             {
                 Pose pose = Pose.identity;
                 if (hand.GetJointPose(joints[i], out pose))
                 {
-                    group.Add(new PoseData(pose));
+                    group.Add(new SerializablePose(pose));
                 }
                 else
                 {
